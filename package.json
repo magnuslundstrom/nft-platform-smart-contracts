@@ -1,0 +1,23 @@
+{
+  "name": "nft-platform-smart-contracts",
+  "version": "1.0.0",
+  "description": "Make sure you have truffle installed on your local machine to run the code in this repo.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magnuslundstrom/nft-platform-smart-contracts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/magnuslundstrom/nft-platform-smart-contracts/issues"
+  },
+  "homepage": "https://github.com/magnuslundstrom/nft-platform-smart-contracts#readme"
+}
