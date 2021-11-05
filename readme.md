@@ -1,6 +1,6 @@
 # NFT-platform-smart-contracts
 
-# SHOULD CONTAIN INFORMATION ABOUT THE DIFFERENT CONTRACTS (ADD LATER)
+# SHOULD CONTAIN INFORMATION ABOUT THE DIFFERENT CONTRACTS (ADD LATER.)
 
 Make sure you have truffle installed on your local machine to run the code in this repo.
 
