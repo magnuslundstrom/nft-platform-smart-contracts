@@ -3,7 +3,7 @@ name: Pull Request
 on: pull_request
 
 jobs:
-    build:
+    unit-tests:
         runs-on: ubuntu-latest
         steps:
             - name: Get repo
@@ -14,13 +14,11 @@ jobs:
                   node-version: '14'
                   cache: 'npm'
 
-          - name: Install truffle
-            run: npm install -g truffle
-          
-          - name: Install application dependencies
-            run: npm i
+            - name: Install truffle
+              run: npm install -g truffle
 
-          - name: Run unit tests of contracts
-            run: truffle test
-            
+            - name: Install application dependencies
+              run: npm i
 
+            - name: Run unit tests of contracts
+              run: truffle test
