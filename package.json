@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/magnuslundstrom/nft-platform-smart-contracts/issues"
   },
-  "homepage": "https://github.com/magnuslundstrom/nft-platform-smart-contracts#readme"
+  "homepage": "https://github.com/magnuslundstrom/nft-platform-smart-contracts#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2"
+  }
 }
