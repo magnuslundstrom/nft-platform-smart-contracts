@@ -1,0 +1,125 @@
+{
+  "contractName": "AuctionFactory",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/AuctionFactory.sol\":\"AuctionFactory\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/AuctionFactory.sol\":{\"keccak256\":\"0xbac6b0d54c42da83ec9f5362581386e5d18b2e0b4cc1154fe4e89676a3a30c42\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://aec08f76c0bb1642f3c24f5ed2f9e181244de4f6f95635f16aa7f7b13151b81e\",\"dweb:/ipfs/QmeNguUL3Zt2DfNLxzBGGi7JAkitYfsfCApNBiYyXcq6Hy\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220bb55ddbc7b25473545e18cb40c10bfe966fc3546c82a53f5183b014a0cd1e09e64736f6c63430008090033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220bb55ddbc7b25473545e18cb40c10bfe966fc3546c82a53f5183b014a0cd1e09e64736f6c63430008090033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "66:26:13:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "66:26:13:-:0;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.22 <0.9.0;\n\ncontract AuctionFactory {}\n",
+  "sourcePath": "/Users/magnuslundstrom/Documents/nft-platform-smart-contracts/contracts/AuctionFactory.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/AuctionFactory.sol",
+    "exportedSymbols": {
+      "AuctionFactory": [
+        2096
+      ]
+    },
+    "id": 2097,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2095,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.9",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:32:13"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "AuctionFactory",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 2096,
+        "linearizedBaseContracts": [
+          2096
+        ],
+        "name": "AuctionFactory",
+        "nameLocation": "75:14:13",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 2097,
+        "src": "66:26:13",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:61:13"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/AuctionFactory.sol",
+    "exportedSymbols": {
+      "AuctionFactory": [
+        2096
+      ]
+    },
+    "id": 2097,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2095,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.9",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:32:13"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "AuctionFactory",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 2096,
+        "linearizedBaseContracts": [
+          2096
+        ],
+        "name": "AuctionFactory",
+        "nameLocation": "75:14:13",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 2097,
+        "src": "66:26:13",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:61:13"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.9+commit.e5eed63a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2021-11-07T22:15:07.162Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
