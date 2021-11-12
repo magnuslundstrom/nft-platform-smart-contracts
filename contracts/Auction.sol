@@ -103,22 +103,16 @@ contract NFTPlatformAuction {
         auction.NFTContractAddress = _NFTContractAddress;
     }
 
-    function buyNFT(string calldata _key) public {
+    function buyNFT(string calldata _key) public payable {
         Auction memory auction = auctions[_key];
+
+        require(auction.minPrice == msg.value, "you must pay the price ser");
         ERC721(auction.NFTContractAddress).safeTransferFrom(
             auction.seller,
             msg.sender,
             auction.tokenId
         );
 
-        // it should cost money obv
-        // things to consider: should we delete from the mapping?
+        payable(auction.seller).transfer(msg.value);
     }
-
-    // // function createBid(string calldata _key) public payable {
-    // //     Auction memory auction = auctions[_key];
-    // //     Bid memory bid = Bid({bidder: msg.sender, amount: msg.value});
-    // //     uint256 length = auction.bids.length;
-    // //     auction.bids[length + 1] = bid;
-    // }
 }
