@@ -10,20 +10,20 @@
   "sourceMap": "66:26:13:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "66:26:13:-:0;;;;;",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.22 <0.9.0;\n\ncontract AuctionFactory {}\n",
-  "sourcePath": "/Users/magnuslundstrom/Documents/nft-platform-smart-contracts/contracts/AuctionFactory.sol",
+  "sourcePath": "/Users/magnuslundstrom/Documents/GitHub/nft-platform-smart-contracts/contracts/AuctionFactory.sol",
   "ast": {
     "absolutePath": "project:/contracts/AuctionFactory.sol",
     "exportedSymbols": {
       "AuctionFactory": [
-        2096
+        2166
       ]
     },
-    "id": 2097,
+    "id": 2167,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2095,
+        "id": 2165,
         "literals": [
           "solidity",
           ">=",
@@ -43,15 +43,15 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 2096,
+        "id": 2166,
         "linearizedBaseContracts": [
-          2096
+          2166
         ],
         "name": "AuctionFactory",
         "nameLocation": "75:14:13",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 2097,
+        "scope": 2167,
         "src": "66:26:13",
         "usedErrors": []
       }
@@ -62,15 +62,15 @@
     "absolutePath": "project:/contracts/AuctionFactory.sol",
     "exportedSymbols": {
       "AuctionFactory": [
-        2096
+        2166
       ]
     },
-    "id": 2097,
+    "id": 2167,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2095,
+        "id": 2165,
         "literals": [
           "solidity",
           ">=",
@@ -90,15 +90,15 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 2096,
+        "id": 2166,
         "linearizedBaseContracts": [
-          2096
+          2166
         ],
         "name": "AuctionFactory",
         "nameLocation": "75:14:13",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 2097,
+        "scope": 2167,
         "src": "66:26:13",
         "usedErrors": []
       }
@@ -111,7 +111,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-07T22:15:07.162Z",
+  "updatedAt": "2021-11-11T19:52:35.030Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
