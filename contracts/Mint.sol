@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract Mint is ERC721URIStorage, Ownable {
     uint256 public tokenId = 0;
     mapping(uint256 => NFT) map;
+    uint256[] public NFTs;
 
     struct NFT {
         uint256 tokenId;
@@ -32,5 +33,30 @@ contract Mint is ERC721URIStorage, Ownable {
         NFT storage _nft = map[tokenId];
         _nft.tokenId = tokenId;
         _nft.tokenURI = tokenURI;
+
+        NFTs.push(tokenId);
+    }
+
+    function getOwnedNfts(address _address) public view returns (NFT[] memory) {
+        uint256 nftCount = balanceOf(_address);
+        if (nftCount == 0) {
+            return new NFT[](0);
+        }
+
+        NFT[] memory ownedNfts = new NFT[](nftCount);
+        uint256 totalNfts = NFTs.length;
+        uint256 resultIndex = 0;
+        uint256 nftId = 1;
+
+        while (nftId <= totalNfts) {
+            if (ownerOf(nftId) == _address) {
+                ownedNfts[resultIndex] = NFT(
+                    map[nftId].tokenId,
+                    map[nftId].tokenURI
+                );
+                nftId = nftId + 1;
+            }
+        }
+        return ownedNfts;
     }
 }

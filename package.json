@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/magnuslundstrom/nft-platform-smart-contracts#readme",
   "dependencies": {
-    "@openzeppelin/contracts": "^4.3.2"
+    "@openzeppelin/contracts": "^4.3.2",
+    "ethers": "^5.5.1"
   }
 }
