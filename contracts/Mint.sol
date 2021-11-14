@@ -54,8 +54,9 @@ contract Mint is ERC721URIStorage, Ownable {
                     map[nftId].tokenId,
                     map[nftId].tokenURI
                 );
-                nftId = nftId + 1;
+                resultIndex = resultIndex + 1;
             }
+            nftId = nftId + 1;
         }
         return ownedNfts;
     }

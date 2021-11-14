@@ -12,7 +12,16 @@ const mintContractOwnerWallet = new ethers.Wallet(MINT_CONTRACT_OWNER_PRIVATE_KE
 
 const mintContract = new ethers.Contract(MINT_CONTRACT_ADDRESS, MINT_ABI, mintContractOwnerWallet);
 
-mintContract.mintNFT(
-    '0x73d99F9ED60622a4939E7c13Ffa52A69547A9A1B',
-    'https://gateway.pinata.cloud/ipfs/QmPVFXu6W1PBYpDsGomG8qdsc69Kmt8N68stWjaBnZTjjj'
-);
+const mint = async () => {
+    await mintContract.mintNFT(
+        '0xb22d34ABC6716e210ff095CaFdCe6A83990f0A7A',
+        'https://gateway.pinata.cloud/ipfs/QmPVFXu6W1PBYpDsGomG8qdsc69Kmt8N68stWjaBnZTjjj'
+    );
+
+    await mintContract.mintNFT(
+        '0xb22d34ABC6716e210ff095CaFdCe6A83990f0A7A',
+        'https://gateway.pinata.cloud/ipfs/QmSW85y12S4L4MsqAPX5rQqE5R2Gu5Rx16DzvgGh3nFRmW'
+    );
+};
+
+mint();

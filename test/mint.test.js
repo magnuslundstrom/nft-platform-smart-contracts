@@ -2,6 +2,7 @@ const MintContract = artifacts.require('Mint');
 
 contract('Mint', (accounts) => {
     let deployedContract;
+    let cleanContract;
     const contractName = 'mint';
     const contractSymbol = 'NFT-platform';
     const contractOwner = accounts[0];
@@ -9,6 +10,7 @@ contract('Mint', (accounts) => {
 
     beforeEach(async () => {
         deployedContract = await MintContract.deployed();
+        cleanContract = await MintContract.new();
     });
 
     describe('deploys and initial values', () => {
@@ -57,6 +59,34 @@ contract('Mint', (accounts) => {
             await deployedContract.mintNFT(accounts[0], tokenURI);
             const balanceOf = await deployedContract.balanceOf(accounts[0]);
             assert.equal(balanceOf, 3, 'balance should increase');
+        });
+    });
+
+    describe('inspect clean contract behaviour', () => {
+        it('tokenId starts at 0', async () => {
+            const tokenId = await cleanContract.tokenId();
+            assert.equal(tokenId, 0, 'tokenId should start at 0');
+        });
+        it('mint increasing tokenId', async () => {
+            const ownedNfts0 = await cleanContract.getOwnedNfts(accounts[1]);
+            assert.equal(ownedNfts0.length, 0, 'ownedNfts length should be 0 in beginning');
+
+            await cleanContract.mintNFT(accounts[1], tokenURI);
+            const tokenId1 = await cleanContract.tokenId();
+            assert.equal(tokenId1, 1, 'tokenId should increase');
+
+            const ownedNfts1 = await cleanContract.getOwnedNfts(accounts[1]);
+            assert.equal(ownedNfts1.length, 1, 'ownedNfts length should be 1 now');
+
+            await cleanContract.mintNFT(accounts[1], tokenURI);
+            const tokenId2 = await cleanContract.tokenId();
+            assert.equal(tokenId2, 2, 'tokenId should increase');
+
+            // mint for another one in the mean time just to test
+            await cleanContract.mintNFT(accounts[2], tokenURI);
+
+            const ownedNfts2 = await cleanContract.getOwnedNfts(accounts[1]);
+            assert.equal(ownedNfts2.length, 2, 'ownedNfts length should be 2 now');
         });
     });
 
