@@ -77,14 +77,17 @@ contract NFTPlatformAuction {
         address NFTContractAddress;
         // Bid[] bids;
     }
+    mapping(uint256 => Auction) public auctions;
+    uint256[] public auctionList;
 
-    mapping(string => Auction) public auctions;
+    function getAuctionListLength() public view returns (uint256) {
+        return auctionList.length;
+    }
 
     // SHOULD CHECK IF THE TOKEN ACTUALLY EXISTS LATER ON
     // mby this should be only callable by owner since we need so custom key numbers
     // key format: tokenId:contractAddress
     function createAuction(
-        string calldata _key,
         uint256 _minPrice,
         uint256 _tokenId,
         address _NFTContractAddress
@@ -94,17 +97,19 @@ contract NFTPlatformAuction {
             "you must own the token"
         );
 
-        // should ensure that we are approved;
+        // should ensure that we are approved on the nftContract as well;
 
-        Auction storage auction = auctions[_key];
+        Auction storage auction = auctions[_tokenId];
         auction.seller = msg.sender;
         auction.minPrice = _minPrice;
         auction.tokenId = _tokenId;
         auction.NFTContractAddress = _NFTContractAddress;
+
+        auctionList.push(_tokenId);
     }
 
-    function buyNFT(string calldata _key) public payable {
-        Auction memory auction = auctions[_key];
+    function buyNFT(uint256 _tokenId) public payable {
+        Auction memory auction = auctions[_tokenId];
 
         require(auction.minPrice == msg.value, "you must pay the price ser");
         ERC721(auction.NFTContractAddress).safeTransferFrom(
