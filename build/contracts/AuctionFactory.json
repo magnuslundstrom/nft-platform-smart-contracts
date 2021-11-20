@@ -7,23 +7,23 @@
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "99:26:2:-:0;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "99:26:2:-:0;;;;;",
+  "sourceMap": "99:26:13:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "99:26:13:-:0;;;;;",
   "source": "// SPDX-License-Identifier: MIT\n\n// unsure if this will be used\n\npragma solidity >=0.4.22 <0.9.0;\n\ncontract AuctionFactory {}\n",
-  "sourcePath": "/Users/magnuslundstrom/Documents/GitHub/nft-platform-smart-contracts/contracts/AuctionFactory.sol",
+  "sourcePath": "/Users/magnuslundstrom/Documents/nft-platform-smart-contracts/contracts/AuctionFactory.sol",
   "ast": {
     "absolutePath": "project:/contracts/AuctionFactory.sol",
     "exportedSymbols": {
       "AuctionFactory": [
-        461
+        2337
       ]
     },
-    "id": 462,
+    "id": 2338,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 460,
+        "id": 2336,
         "literals": [
           "solidity",
           ">=",
@@ -34,7 +34,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "65:32:2"
+        "src": "65:32:13"
       },
       {
         "abstract": false,
@@ -43,34 +43,34 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 461,
+        "id": 2337,
         "linearizedBaseContracts": [
-          461
+          2337
         ],
         "name": "AuctionFactory",
-        "nameLocation": "108:14:2",
+        "nameLocation": "108:14:13",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 462,
-        "src": "99:26:2",
+        "scope": 2338,
+        "src": "99:26:13",
         "usedErrors": []
       }
     ],
-    "src": "65:61:2"
+    "src": "65:61:13"
   },
   "legacyAST": {
     "absolutePath": "project:/contracts/AuctionFactory.sol",
     "exportedSymbols": {
       "AuctionFactory": [
-        461
+        2337
       ]
     },
-    "id": 462,
+    "id": 2338,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 460,
+        "id": 2336,
         "literals": [
           "solidity",
           ">=",
@@ -81,7 +81,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "65:32:2"
+        "src": "65:32:13"
       },
       {
         "abstract": false,
@@ -90,20 +90,20 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 461,
+        "id": 2337,
         "linearizedBaseContracts": [
-          461
+          2337
         ],
         "name": "AuctionFactory",
-        "nameLocation": "108:14:2",
+        "nameLocation": "108:14:13",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 462,
-        "src": "99:26:2",
+        "scope": 2338,
+        "src": "99:26:13",
         "usedErrors": []
       }
     ],
-    "src": "65:61:2"
+    "src": "65:61:13"
   },
   "compiler": {
     "name": "solc",
@@ -118,7 +118,7 @@
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-14T14:52:14.837Z",
+  "updatedAt": "2021-11-20T09:52:24.259Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

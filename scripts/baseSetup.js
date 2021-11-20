@@ -29,12 +29,12 @@ const mintContract = new ethers.Contract(MINT_CONTRACT_ADDRESS, MINT_ABI, mintCo
 const mint = async () => {
     await mintContract.mintNFT(
         '0xb22d34ABC6716e210ff095CaFdCe6A83990f0A7A',
-        'https://gateway.pinata.cloud/ipfs/QmPVFXu6W1PBYpDsGomG8qdsc69Kmt8N68stWjaBnZTjjj'
+        'http://nft.josefinegade.com/metadata-1.json'
     );
 
     await mintContract.mintNFT(
         '0xb22d34ABC6716e210ff095CaFdCe6A83990f0A7A',
-        'https://gateway.pinata.cloud/ipfs/QmSW85y12S4L4MsqAPX5rQqE5R2Gu5Rx16DzvgGh3nFRmW'
+        'http://nft.josefinegade.com/metadata-2.json'
     );
 };
 
