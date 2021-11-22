@@ -10,7 +10,7 @@
   "sourceMap": "99:26:13:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "99:26:13:-:0;;;;;",
   "source": "// SPDX-License-Identifier: MIT\n\n// unsure if this will be used\n\npragma solidity >=0.4.22 <0.9.0;\n\ncontract AuctionFactory {}\n",
-  "sourcePath": "/Users/magnuslundstrom/Documents/nft-platform-smart-contracts/contracts/AuctionFactory.sol",
+  "sourcePath": "/Users/magnuslundstrom/Documents/GitHub/nft-platform-smart-contracts/contracts/AuctionFactory.sol",
   "ast": {
     "absolutePath": "project:/contracts/AuctionFactory.sol",
     "exportedSymbols": {
@@ -118,7 +118,7 @@
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-20T09:52:24.259Z",
+  "updatedAt": "2021-11-20T19:11:38.728Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

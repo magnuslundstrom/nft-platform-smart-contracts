@@ -51,7 +51,7 @@ contract('NFTPlatformAuction', async (accounts) => {
             await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
                 from: nftOwner,
             });
-            const auction = await auctionContract.auctions(1);
+            const auction = await auctionContract.auctionsMap(1);
             const { seller, minPrice, tokenId, NFTContractAddress } = auction;
 
             assert.equal(seller, nftOwner, 'msg.sender should match');
@@ -96,6 +96,34 @@ contract('NFTPlatformAuction', async (accounts) => {
                 console.log(err);
                 assert.fail('shouldnt fail in buy an NFT');
             }
+        });
+    });
+    describe('getAuctions test', async () => {
+        it('getAuctions returns auctions', async () => {
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+            await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
+                from: nftOwner,
+            });
+
+            const auctions = await auctionContract.getAuctions();
+            const auction = auctions[0];
+            assert.containsAllKeys(auction, ['minPrice', 'tokenId', 'NFTContractAddress', 'tokenURI']);
+            assert.equal(auctions.length, 1);
+        });
+    });
+    describe('auctionExists test', async () => {
+        it('returns false when no auction exists', async () => {
+            const result = await auctionContract.auctionExists(10);
+            assert.equal(result, false, 'auctionExists for tokenId should return false');
+        });
+        it('returns true when an auction exists', async () => {
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+            await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
+                from: nftOwner,
+            });
+
+            const result = await auctionContract.auctionExists(1);
+            assert.equal(result, true, 'auctionExists should return true when an auction exists');
         });
     });
 });

@@ -21,6 +21,8 @@ interface ERC721 {
         bool _approved
     );
 
+    function tokenURI(uint256 _tokenId) external view returns (string memory);
+
     function balanceOf(address _owner) external view returns (uint256);
 
     function ownerOf(uint256 _tokenId) external view returns (address);
@@ -56,19 +58,6 @@ interface ERC721 {
         returns (bool);
 }
 
-interface ERC165 {
-    function supportsInterface(bytes4 interfaceID) external view returns (bool);
-}
-
-interface ERC721TokenReceiver {
-    function onERC721Received(
-        address _operator,
-        address _from,
-        uint256 _tokenId,
-        bytes memory _data
-    ) external returns (bytes4);
-}
-
 contract NFTPlatformAuction {
     struct Auction {
         address seller;
@@ -77,16 +66,21 @@ contract NFTPlatformAuction {
         address NFTContractAddress;
         // Bid[] bids;
     }
-    mapping(uint256 => Auction) public auctions;
+    mapping(uint256 => Auction) public auctionsMap;
     uint256[] public auctionList;
 
     function getAuctionListLength() public view returns (uint256) {
         return auctionList.length;
     }
 
-    // SHOULD CHECK IF THE TOKEN ACTUALLY EXISTS LATER ON
-    // mby this should be only callable by owner since we need so custom key numbers
-    // key format: tokenId:contractAddress
+    function auctionExists(uint256 _tokenId) public view returns (bool) {
+        if (auctionsMap[_tokenId].minPrice == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     function createAuction(
         uint256 _minPrice,
         uint256 _tokenId,
@@ -97,9 +91,7 @@ contract NFTPlatformAuction {
             "you must own the token"
         );
 
-        // should ensure that we are approved on the nftContract as well;
-
-        Auction storage auction = auctions[_tokenId];
+        Auction storage auction = auctionsMap[_tokenId];
         auction.seller = msg.sender;
         auction.minPrice = _minPrice;
         auction.tokenId = _tokenId;
@@ -109,7 +101,7 @@ contract NFTPlatformAuction {
     }
 
     function buyNFT(uint256 _tokenId) public payable {
-        Auction memory auction = auctions[_tokenId];
+        Auction memory auction = auctionsMap[_tokenId];
 
         require(auction.minPrice == msg.value, "you must pay the price ser");
         ERC721(auction.NFTContractAddress).safeTransferFrom(
@@ -119,5 +111,31 @@ contract NFTPlatformAuction {
         );
 
         payable(auction.seller).transfer(msg.value);
+    }
+
+    struct NFTAuctionItem {
+        uint256 minPrice;
+        uint256 tokenId;
+        address NFTContractAddress;
+        string tokenURI;
+    }
+
+    // add in pagination later
+    function getAuctions() public view returns (NFTAuctionItem[] memory) {
+        uint256 totalAuctions = getAuctionListLength();
+        NFTAuctionItem[] memory auctions = new NFTAuctionItem[](totalAuctions);
+
+        for (uint256 i = 0; i < totalAuctions; i++) {
+            auctions[i] = NFTAuctionItem({
+                minPrice: auctionsMap[auctionList[i]].minPrice,
+                tokenId: auctionsMap[auctionList[i]].tokenId,
+                NFTContractAddress: auctionsMap[auctionList[i]]
+                    .NFTContractAddress,
+                tokenURI: ERC721(auctionsMap[auctionList[i]].NFTContractAddress)
+                    .tokenURI(auctionList[i])
+            });
+        }
+
+        return auctions;
     }
 }
