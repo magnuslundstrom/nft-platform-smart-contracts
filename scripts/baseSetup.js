@@ -49,6 +49,7 @@ const putForSale = async () => {
         provider
     );
     const auctionContract = new ethers.Contract(AUCTION_CONTRACT_ADDRESS, AUCTION_ABI, owner);
+    const mintContract = new ethers.Contract(MINT_CONTRACT_ADDRESS, MINT_ABI, owner);
 
     await mintContract.setApprovalForAll(AUCTION_CONTRACT_ADDRESS, true);
     await auctionContract.createAuction(ethers.utils.parseEther('1'), 3, MINT_CONTRACT_ADDRESS);

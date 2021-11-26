@@ -17,6 +17,6 @@ fi
 echo "booting up!"
 
 ganache-cli --mnemonic "$MNEMONIC" &
-truffle migrate --network ganache_cli && node baseSetup.js
+truffle migrate --network ganache_cli --reset && node baseSetup.js
 
 echo "done, deployed the contracts onto localhost:8545 and executed baseSetup.js"
