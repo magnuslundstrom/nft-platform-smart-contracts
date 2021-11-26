@@ -72,6 +72,11 @@ contract('NFTPlatformAuction', async (accounts) => {
 
                 const prevAcc1Bal = await web3.eth.getBalance(nftOwner);
                 const prevAcc2Bal = await web3.eth.getBalance(accounts[2]);
+                await mintContract.mintNFT(nftOwner, tokenURI);
+                await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+                await auctionContract.createAuction(_price, 1, mintContract.address, {
+                    from: nftOwner,
+                });
                 const txReceipt = await auctionContract.buyNFT(1, {
                     from: accounts[2],
                     value: _price,
@@ -127,6 +132,55 @@ contract('NFTPlatformAuction', async (accounts) => {
             assert.equal(result, true, 'auctionExists should return true when an auction exists');
         });
 
-        it('it also successfully returns false on auctionExists after being sold', async () => {});
+        it('it also successfully returns false on auctionExists after being sold', async () => {
+            await mintContract.mintNFT(nftOwner, tokenURI);
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+            await auctionContract.createAuction(_price, 1, mintContract.address, {
+                from: nftOwner,
+            });
+
+            await auctionContract.buyNFT(1, {
+                from: accounts[2],
+                value: _price,
+                gasPrice,
+            });
+
+            const result = await auctionContract.auctionExists(1);
+            assert.equal(result, false, 'auction should not exist in the list now that it has been bought');
+        });
+
+        it('mix of a bunch of different tests consistency when combining a bunch of different functions', async () => {
+            let result;
+            await mintContract.mintNFT(nftOwner, tokenURI);
+            await mintContract.mintNFT(nftOwner, tokenURI);
+            await mintContract.mintNFT(nftOwner, tokenURI);
+
+            await mintContract.setApprovalForAll(auctionContract.address, { from: nftOwner });
+
+            await auctionContract.createAuction(_price, 1, mintContract.address, { from: nftOwner });
+
+            result = await auctionContract.auctionExists(1);
+            assert.equal(result, true, 'auction should exists for tokenId 1');
+            result = await auctionContract.auctionExists(2);
+            assert.equal(result, false, 'auction should not exist for tokenId 2');
+
+            result = await auctionContract.getAuctionListLength();
+            assert.equal(result, 1);
+
+            try {
+                await auctionContract.createAuction(_price, 1, mintContract.address, { from: nftOwner });
+                assert.fail('should not succeed since a auction already exists with this tokenId');
+            } catch (err) {}
+            try {
+                await auctionContract.createAuction(_price, 2, mintContract.address, { from: nftOwner });
+            } catch (err) {
+                assert.fail('should not fail since the tokenId does not already exist in auctionList');
+            }
+
+            try {
+                await auctionContract.createAuction(_price, 2, mintContract.address, { from: nftOwner });
+                assert.fail('should fail now');
+            } catch (err) {}
+        });
     });
 });
