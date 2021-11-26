@@ -2,79 +2,33 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-
-/* is ERC165 */
-interface ERC721 {
-    event Transfer(
-        address indexed _from,
-        address indexed _to,
-        uint256 indexed _tokenId
-    );
-    event Approval(
-        address indexed _owner,
-        address indexed _approved,
-        uint256 indexed _tokenId
-    );
-    event ApprovalForAll(
-        address indexed _owner,
-        address indexed _operator,
-        bool _approved
-    );
-
-    function tokenURI(uint256 _tokenId) external view returns (string memory);
-
-    function balanceOf(address _owner) external view returns (uint256);
-
-    function ownerOf(uint256 _tokenId) external view returns (address);
-
-    function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId,
-        bytes memory data
-    ) external payable;
-
-    function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) external payable;
-
-    function transferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) external payable;
-
-    function approve(address _approved, uint256 _tokenId) external payable;
-
-    function setApprovalForAll(address _operator, bool _approved) external;
-
-    function getApproved(uint256 _tokenId) external view returns (address);
-
-    function isApprovedForAll(address _owner, address _operator)
-        external
-        view
-        returns (bool);
-}
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract NFTPlatformAuction {
+    struct Purchase {
+        address from;
+        address to;
+        uint256 price;
+        uint256 date;
+    }
+
     struct Auction {
         address seller;
-        uint256 minPrice;
+        uint256 price;
         uint256 tokenId;
         address NFTContractAddress;
-        // Bid[] bids;
     }
+
     mapping(uint256 => Auction) public auctionsMap;
-    uint256[] public auctionList;
+    mapping(uint256 => uint256) private auctionListIndexMap;
+    uint256[] private auctionList;
 
     function getAuctionListLength() public view returns (uint256) {
         return auctionList.length;
     }
 
     function auctionExists(uint256 _tokenId) public view returns (bool) {
-        if (auctionsMap[_tokenId].minPrice == 0) {
+        if (auctionListIndexMap[_tokenId] == 0) {
             return false;
         } else {
             return true;
@@ -82,39 +36,47 @@ contract NFTPlatformAuction {
     }
 
     function createAuction(
-        uint256 _minPrice,
+        uint256 _price,
         uint256 _tokenId,
         address _NFTContractAddress
     ) public {
         require(
-            ERC721(_NFTContractAddress).ownerOf(_tokenId) == msg.sender,
+            ERC721URIStorage(_NFTContractAddress).ownerOf(_tokenId) ==
+                msg.sender,
             "you must own the token"
         );
+        // validate that the token exists
 
         Auction storage auction = auctionsMap[_tokenId];
         auction.seller = msg.sender;
-        auction.minPrice = _minPrice;
+        auction.price = _price;
         auction.tokenId = _tokenId;
         auction.NFTContractAddress = _NFTContractAddress;
 
         auctionList.push(_tokenId);
+        uint256 idx = auctionList.length;
+        auctionListIndexMap[_tokenId] = idx;
     }
 
     function buyNFT(uint256 _tokenId) public payable {
         Auction memory auction = auctionsMap[_tokenId];
 
-        require(auction.minPrice == msg.value, "you must pay the price ser");
-        ERC721(auction.NFTContractAddress).safeTransferFrom(
+        require(auction.price == msg.value, "you must pay the price ser");
+        ERC721URIStorage(auction.NFTContractAddress).safeTransferFrom(
             auction.seller,
             msg.sender,
             auction.tokenId
         );
 
         payable(auction.seller).transfer(msg.value);
+
+        removeIndex(auctionListIndexMap[_tokenId] - 1);
+        delete auctionListIndexMap[_tokenId];
     }
 
+    // This includes tokenURI to display list
     struct NFTAuctionItem {
-        uint256 minPrice;
+        uint256 price;
         uint256 tokenId;
         address NFTContractAddress;
         string tokenURI;
@@ -127,15 +89,26 @@ contract NFTPlatformAuction {
 
         for (uint256 i = 0; i < totalAuctions; i++) {
             auctions[i] = NFTAuctionItem({
-                minPrice: auctionsMap[auctionList[i]].minPrice,
+                price: auctionsMap[auctionList[i]].price,
                 tokenId: auctionsMap[auctionList[i]].tokenId,
                 NFTContractAddress: auctionsMap[auctionList[i]]
                     .NFTContractAddress,
-                tokenURI: ERC721(auctionsMap[auctionList[i]].NFTContractAddress)
-                    .tokenURI(auctionList[i])
+                tokenURI: ERC721URIStorage(
+                    auctionsMap[auctionList[i]].NFTContractAddress
+                ).tokenURI(auctionList[i])
             });
         }
 
         return auctions;
+    }
+
+    // code from https://ethereum.stackexchange.com/questions/1527/how-to-delete-an-element-at-a-certain-index-in-an-array/1528
+    function removeIndex(uint256 index) private {
+        if (index >= auctionList.length) return;
+
+        for (uint256 i = index; i < auctionList.length - 1; i++) {
+            auctionList[i] = auctionList[i + 1];
+        }
+        auctionList.pop();
     }
 }

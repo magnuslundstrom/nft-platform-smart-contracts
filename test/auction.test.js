@@ -2,7 +2,7 @@ const Auction = artifacts.require('NFTPlatformAuction');
 const MintContract = artifacts.require('Mint');
 
 contract('NFTPlatformAuction', async (accounts) => {
-    const _minPrice = web3.utils.toWei('1');
+    const _price = web3.utils.toWei('1');
     const nftOwner = accounts[1];
     const tokenURI = 'https://gateway.pinata.cloud/ipfs/QmZrKyAjZjdVTyaj9nNnmP7FNT8rzQ2cEikjFwRQnPAHgW';
     let auctionContract;
@@ -31,7 +31,7 @@ contract('NFTPlatformAuction', async (accounts) => {
     describe('createAuction function', () => {
         it('we can create an auction', async () => {
             try {
-                await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
+                await auctionContract.createAuction(_price, 1, mintContract.address, {
                     from: nftOwner,
                 });
             } catch (err) {
@@ -39,7 +39,7 @@ contract('NFTPlatformAuction', async (accounts) => {
             }
         });
         it('auctionListList.length should increase', async () => {
-            await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
+            await auctionContract.createAuction(_price, 1, mintContract.address, {
                 from: nftOwner,
             });
 
@@ -48,14 +48,14 @@ contract('NFTPlatformAuction', async (accounts) => {
         });
 
         it('auction should be in the auctionsMap and have correct values', async () => {
-            await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
+            await auctionContract.createAuction(_price, 1, mintContract.address, {
                 from: nftOwner,
             });
             const auction = await auctionContract.auctionsMap(1);
-            const { seller, minPrice, tokenId, NFTContractAddress } = auction;
+            const { seller, price, tokenId, NFTContractAddress } = auction;
 
             assert.equal(seller, nftOwner, 'msg.sender should match');
-            assert.equal(web3.utils.fromWei(_minPrice), web3.utils.fromWei(minPrice), 'prices should match');
+            assert.equal(web3.utils.fromWei(_price), web3.utils.fromWei(price), 'prices should match');
             assert.equal(tokenId, 1, 'tokenIds should match');
             assert.equal(NFTContractAddress, mintContract.address, 'nftContract addresses should match');
         });
@@ -66,7 +66,7 @@ contract('NFTPlatformAuction', async (accounts) => {
             try {
                 await mintContract.mintNFT(nftOwner, tokenURI);
                 await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
-                await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
+                await auctionContract.createAuction(_price, 1, mintContract.address, {
                     from: nftOwner,
                 });
 
@@ -74,7 +74,7 @@ contract('NFTPlatformAuction', async (accounts) => {
                 const prevAcc2Bal = await web3.eth.getBalance(accounts[2]);
                 const txReceipt = await auctionContract.buyNFT(1, {
                     from: accounts[2],
-                    value: _minPrice,
+                    value: _price,
                     gasPrice,
                 });
 
@@ -91,7 +91,7 @@ contract('NFTPlatformAuction', async (accounts) => {
                     parseInt(curAcc1Bal) > parseInt(prevAcc1Bal),
                     'the account balance of the seller should increase.'
                 );
-                assert.equal(prevAcc2Bal - _minPrice - gasCost, curAcc2Bal, 'acc 2 balance should decrease');
+                assert.equal(prevAcc2Bal - _price - gasCost, curAcc2Bal, 'acc 2 balance should decrease');
             } catch (err) {
                 console.log(err);
                 assert.fail('shouldnt fail in buy an NFT');
@@ -101,16 +101,17 @@ contract('NFTPlatformAuction', async (accounts) => {
     describe('getAuctions test', async () => {
         it('getAuctions returns auctions', async () => {
             await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
-            await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
+            await auctionContract.createAuction(_price, 1, mintContract.address, {
                 from: nftOwner,
             });
 
             const auctions = await auctionContract.getAuctions();
             const auction = auctions[0];
-            assert.containsAllKeys(auction, ['minPrice', 'tokenId', 'NFTContractAddress', 'tokenURI']);
+            assert.containsAllKeys(auction, ['price', 'tokenId', 'NFTContractAddress', 'tokenURI']);
             assert.equal(auctions.length, 1);
         });
     });
+
     describe('auctionExists test', async () => {
         it('returns false when no auction exists', async () => {
             const result = await auctionContract.auctionExists(10);
@@ -118,12 +119,14 @@ contract('NFTPlatformAuction', async (accounts) => {
         });
         it('returns true when an auction exists', async () => {
             await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
-            await auctionContract.createAuction(_minPrice, 1, mintContract.address, {
+            await auctionContract.createAuction(_price, 1, mintContract.address, {
                 from: nftOwner,
             });
 
             const result = await auctionContract.auctionExists(1);
             assert.equal(result, true, 'auctionExists should return true when an auction exists');
         });
+
+        it('it also successfully returns false on auctionExists after being sold', async () => {});
     });
 });
