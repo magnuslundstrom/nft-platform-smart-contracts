@@ -5,12 +5,12 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract NFTPlatformAuction {
-    struct Purchase {
-        address from;
-        address to;
-        uint256 price;
-        uint256 date;
-    }
+    // struct Purchase {
+    //     address from;
+    //     address to;
+    //     uint256 price;
+    //     uint256 date;
+    // }
 
     struct Auction {
         address seller;
@@ -22,6 +22,14 @@ contract NFTPlatformAuction {
     mapping(uint256 => Auction) public auctionsMap;
     mapping(uint256 => uint256) private auctionListIndexMap;
     uint256[] private auctionList;
+
+    event NFTBuy(
+        uint256 indexed tokenId,
+        address indexed buyer,
+        address indexed seller,
+        address NFTContractAddress,
+        uint256 timeStamp
+    );
 
     function getAuctionListLength() public view returns (uint256) {
         return auctionList.length;
@@ -45,6 +53,12 @@ contract NFTPlatformAuction {
                 msg.sender,
             "you must own the token"
         );
+
+        require(
+            auctionExists(_tokenId) == false,
+            "an auction already exists for this token"
+        );
+
         // validate that the token exists
 
         Auction storage auction = auctionsMap[_tokenId];
@@ -72,6 +86,14 @@ contract NFTPlatformAuction {
 
         removeIndex(auctionListIndexMap[_tokenId] - 1);
         delete auctionListIndexMap[_tokenId];
+
+        emit NFTBuy(
+            _tokenId,
+            msg.sender,
+            auction.seller,
+            auction.NFTContractAddress,
+            block.timestamp
+        );
     }
 
     // This includes tokenURI to display list

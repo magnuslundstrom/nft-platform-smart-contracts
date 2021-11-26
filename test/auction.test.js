@@ -65,15 +65,10 @@ contract('NFTPlatformAuction', async (accounts) => {
         it('we can buy an NFT', async () => {
             try {
                 await mintContract.mintNFT(nftOwner, tokenURI);
-                await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
-                await auctionContract.createAuction(_price, 1, mintContract.address, {
-                    from: nftOwner,
-                });
+                await mintContract.approve(auctionContract.address, 1, { from: nftOwner });
 
                 const prevAcc1Bal = await web3.eth.getBalance(nftOwner);
                 const prevAcc2Bal = await web3.eth.getBalance(accounts[2]);
-                await mintContract.mintNFT(nftOwner, tokenURI);
-                await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
                 await auctionContract.createAuction(_price, 1, mintContract.address, {
                     from: nftOwner,
                 });
@@ -101,6 +96,19 @@ contract('NFTPlatformAuction', async (accounts) => {
                 console.log(err);
                 assert.fail('shouldnt fail in buy an NFT');
             }
+        });
+        it('buying an NFT emits an event', async () => {
+            await mintContract.approve(auctionContract.address, 1, { from: nftOwner });
+            await auctionContract.createAuction(_price, 1, mintContract.address, {
+                from: nftOwner,
+            });
+            const txReceipt = await auctionContract.buyNFT(1, {
+                from: accounts[2],
+                value: _price,
+                gasPrice,
+            });
+            const event = txReceipt.logs[0].event;
+            assert.equal(event, 'NFTBuy', 'buying NFT should emit an event');
         });
     });
     describe('getAuctions test', async () => {
@@ -148,14 +156,15 @@ contract('NFTPlatformAuction', async (accounts) => {
             const result = await auctionContract.auctionExists(1);
             assert.equal(result, false, 'auction should not exist in the list now that it has been bought');
         });
-
+    });
+    describe('a bunch of random tests', () => {
         it('mix of a bunch of different tests consistency when combining a bunch of different functions', async () => {
             let result;
-            await mintContract.mintNFT(nftOwner, tokenURI);
-            await mintContract.mintNFT(nftOwner, tokenURI);
-            await mintContract.mintNFT(nftOwner, tokenURI);
+            await mintContract.mintNFT(nftOwner, 'tokenURI1');
+            await mintContract.mintNFT(nftOwner, 'tokenURI2');
+            await mintContract.mintNFT(nftOwner, 'tokenURI3');
 
-            await mintContract.setApprovalForAll(auctionContract.address, { from: nftOwner });
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
 
             await auctionContract.createAuction(_price, 1, mintContract.address, { from: nftOwner });
 
@@ -170,7 +179,9 @@ contract('NFTPlatformAuction', async (accounts) => {
             try {
                 await auctionContract.createAuction(_price, 1, mintContract.address, { from: nftOwner });
                 assert.fail('should not succeed since a auction already exists with this tokenId');
-            } catch (err) {}
+            } catch (err) {
+                assert.equal(err.reason, 'an auction already exists for this token');
+            }
             try {
                 await auctionContract.createAuction(_price, 2, mintContract.address, { from: nftOwner });
             } catch (err) {
@@ -179,8 +190,22 @@ contract('NFTPlatformAuction', async (accounts) => {
 
             try {
                 await auctionContract.createAuction(_price, 2, mintContract.address, { from: nftOwner });
-                assert.fail('should fail now');
-            } catch (err) {}
+                assert.fail('should fail since an auction with 2 exists');
+            } catch (err) {
+                assert.equal(err.reason, 'an auction already exists for this token');
+            }
+
+            await auctionContract.buyNFT(2, {
+                from: accounts[2],
+                value: _price,
+                gasPrice,
+            });
+
+            result = await auctionContract.getAuctionListLength();
+            assert.equal(result, 1, 'length should only be 1 now that we sold an NFT');
+
+            result = await auctionContract.getAuctions();
+            assert.equal(result[0].tokenURI, tokenURI);
         });
     });
 });
