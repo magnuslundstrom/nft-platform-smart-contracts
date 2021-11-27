@@ -23,12 +23,10 @@ contract NFTPlatformAuction {
     mapping(uint256 => uint256) private auctionListIndexMap;
     uint256[] private auctionList;
 
-    event NFTBuy(
+    event CreateAuction(
         uint256 indexed tokenId,
-        address indexed buyer,
         address indexed seller,
-        address NFTContractAddress,
-        uint256 timeStamp
+        address NFTContractAddress
     );
 
     function getAuctionListLength() public view returns (uint256) {
@@ -70,7 +68,18 @@ contract NFTPlatformAuction {
         auctionList.push(_tokenId);
         uint256 idx = auctionList.length;
         auctionListIndexMap[_tokenId] = idx;
+
+        emit CreateAuction(_tokenId, msg.sender, _NFTContractAddress);
     }
+
+    event NFTBuy(
+        uint256 indexed refTokenId,
+        address indexed refBuyer,
+        address indexed refSeller,
+        uint256 tokenId,
+        uint256 price,
+        uint256 timeStamp
+    );
 
     function buyNFT(uint256 _tokenId) public payable {
         Auction memory auction = auctionsMap[_tokenId];
@@ -91,7 +100,8 @@ contract NFTPlatformAuction {
             _tokenId,
             msg.sender,
             auction.seller,
-            auction.NFTContractAddress,
+            _tokenId,
+            msg.value,
             block.timestamp
         );
     }

@@ -4,8 +4,9 @@
 
 # 1) run the ganache-cli with the predefined mnemonic, makes it easier to create these scripts as the accounts are always te same
 # 2) migrate our smart contracts to the network
-# 3) run the baseSetup script to get some dummy data on the chain
-# 4) feel free to turn on the frontend!
+# 3) run copyAbisToWeb script to make sure we have the newest contract Abis
+# 4) run the baseSetup script to get some dummy data on the chain
+# 5) feel free to turn on the frontend!
 
 
 MNEMONIC="siren friend lobster pumpkin quit assist ivory ten pistol embrace close case" 
@@ -17,6 +18,6 @@ fi
 echo "booting up!"
 
 ganache-cli --mnemonic "$MNEMONIC" &
-truffle migrate --network ganache_cli --reset && node baseSetup.js
+truffle migrate --network ganache_cli --reset && node copyAbisToWeb.js && node baseSetup.js 
 
 echo "done, deployed the contracts onto localhost:8545 and executed baseSetup.js"
