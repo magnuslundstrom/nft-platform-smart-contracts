@@ -5,13 +5,6 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract NFTPlatformAuction {
-    // struct Purchase {
-    //     address from;
-    //     address to;
-    //     uint256 price;
-    //     uint256 date;
-    // }
-
     struct Auction {
         address seller;
         uint256 price;

@@ -60,4 +60,12 @@ contract Mint is ERC721URIStorage, Ownable {
         }
         return ownedNfts;
     }
+
+    function isApprovedOrOwner(address _spender, uint256 _tokenId)
+        public
+        view
+        returns (bool)
+    {
+        return _isApprovedOrOwner(_spender, _tokenId);
+    }
 }
