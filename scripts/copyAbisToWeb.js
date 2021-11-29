@@ -1,3 +1,9 @@
+/* 
+
+Copy the abis to the frontend.
+This also runs in the ./fresh.sh script, so you get the newest versions of the contract ABIs on every restart. 
+
+*/
 const fs = require('fs');
 const path = require('path');
 
