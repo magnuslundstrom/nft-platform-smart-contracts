@@ -12,6 +12,14 @@ contract NFTPlatformAuction {
         address NFTContractAddress;
     }
 
+    // This includes tokenURI to display list
+    struct NFTAuctionItem {
+        uint256 price;
+        uint256 tokenId;
+        address NFTContractAddress;
+        string tokenURI;
+    }
+
     mapping(uint256 => Auction) public auctionsMap;
     mapping(uint256 => uint256) private auctionListIndexMap;
     uint256[] private auctionList;
@@ -20,6 +28,15 @@ contract NFTPlatformAuction {
         uint256 indexed tokenId,
         address indexed seller,
         address NFTContractAddress
+    );
+
+    event NFTBuy(
+        uint256 indexed refTokenId,
+        address indexed refBuyer,
+        address indexed refSeller,
+        uint256 tokenId,
+        uint256 price,
+        uint256 timeStamp
     );
 
     function getAuctionListLength() public view returns (uint256) {
@@ -50,7 +67,7 @@ contract NFTPlatformAuction {
             "an auction already exists for this token"
         );
 
-        // validate that the token exists
+        // add in requirement that token exists
 
         Auction storage auction = auctionsMap[_tokenId];
         auction.seller = msg.sender;
@@ -64,15 +81,6 @@ contract NFTPlatformAuction {
 
         emit CreateAuction(_tokenId, msg.sender, _NFTContractAddress);
     }
-
-    event NFTBuy(
-        uint256 indexed refTokenId,
-        address indexed refBuyer,
-        address indexed refSeller,
-        uint256 tokenId,
-        uint256 price,
-        uint256 timeStamp
-    );
 
     function buyNFT(uint256 _tokenId) public payable {
         Auction memory auction = auctionsMap[_tokenId];
@@ -97,14 +105,6 @@ contract NFTPlatformAuction {
             msg.value,
             block.timestamp
         );
-    }
-
-    // This includes tokenURI to display list
-    struct NFTAuctionItem {
-        uint256 price;
-        uint256 tokenId;
-        address NFTContractAddress;
-        string tokenURI;
     }
 
     // add in pagination later
