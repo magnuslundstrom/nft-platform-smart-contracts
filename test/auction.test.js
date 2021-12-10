@@ -208,4 +208,51 @@ contract('NFTPlatformAuction', async (accounts) => {
             assert.equal(result[0].tokenURI, tokenURI);
         });
     });
+    describe('Test removeAuction function', () => {
+        it('auctionExists should be true before and false after calling the removeAuction function', async () => {
+            let result;
+            await mintContract.mintNFT(nftOwner, 'tokenURI1');
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+            await auctionContract.createAuction(_price, 1, mintContract.address, { from: nftOwner });
+
+            result = await auctionContract.auctionExists('1');
+            assert.equal(result, true, 'auction should exist');
+
+            await auctionContract.removeAuction('1', mintContract.address, { from: nftOwner });
+
+            result = await auctionContract.auctionExists('1');
+            assert.equal(result, false, 'auction should not exist');
+        });
+        it('Should throw an error there is no auction for that token', async () => {
+            let result;
+            await mintContract.mintNFT(nftOwner, 'tokenURI1');
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+            await auctionContract.createAuction(_price, 1, mintContract.address, { from: nftOwner });
+
+            result = await auctionContract.auctionExists('1');
+            assert.equal(result, true, 'auction should exist');
+
+            try {
+                await auctionContract.removeAuction('1', mintContract.address);
+                assert.fail("The function call should throw error when we don't own the token");
+            } catch (err) {
+                assert.equal(err.reason, 'you must own the token');
+            }
+        });
+        it('Should throw an error if it is not the owner of the token that calls the function', async () => {
+            let result;
+            await mintContract.mintNFT(nftOwner, 'tokenURI1');
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+
+            result = await auctionContract.auctionExists('1');
+            assert.equal(result, false, 'auction should not exist');
+
+            try {
+                await auctionContract.removeAuction('1', mintContract.address, { from: nftOwner });
+                assert.fail('The function call should throw error when an auction dont exist for the token');
+            } catch (err) {
+                assert.equal(err.reason, 'an auction must exist for this token before you can remove it');
+            }
+        });
+    });
 });

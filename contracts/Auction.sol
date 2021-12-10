@@ -107,6 +107,24 @@ contract NFTPlatformAuction {
         );
     }
 
+    function removeAuction(uint256 _tokenId, address _NFTContractAddress)
+        public
+    {
+        require(
+            ERC721URIStorage(_NFTContractAddress).ownerOf(_tokenId) ==
+                msg.sender,
+            "you must own the token"
+        );
+
+        require(
+            auctionExists(_tokenId) == true,
+            "an auction must exist for this token before you can remove it"
+        );
+
+        removeIndex(auctionListIndexMap[_tokenId] - 1);
+        delete auctionListIndexMap[_tokenId];
+    }
+
     // add in pagination later
     function getAuctions() public view returns (NFTAuctionItem[] memory) {
         uint256 totalAuctions = getAuctionListLength();
