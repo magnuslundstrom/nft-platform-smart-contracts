@@ -21,5 +21,5 @@ abiPaths.forEach((obj) => {
     const dataJson = JSON.parse(data);
     const abi = dataJson.abi;
 
-    fs.writeFileSync(`${webAbiPath}/${obj.name}.json`, JSON.stringify(abi));
+    fs.writeFileSync(`${webAbiPath}/${obj.name}/dev.json`, JSON.stringify(abi));
 });
