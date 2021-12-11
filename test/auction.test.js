@@ -254,5 +254,24 @@ contract('NFTPlatformAuction', async (accounts) => {
                 assert.equal(err.reason, 'an auction must exist for this token before you can remove it');
             }
         });
+        it('Should not return the deleted item in the getAuctions call', async () => {
+            let result;
+            await mintContract.mintNFT(nftOwner, 'tokenURI1');
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+            await auctionContract.createAuction(_price, 1, mintContract.address, { from: nftOwner });
+
+            result = await auctionContract.getAuctions();
+            assert.equal(result.length, 1, 'the length should be 1');
+            result = result[0];
+            assert.equal(result.tokenId, '1', 'tokenId should be 1');
+            assert.equal(
+                result.tokenURI,
+                'https://gateway.pinata.cloud/ipfs/QmZrKyAjZjdVTyaj9nNnmP7FNT8rzQ2cEikjFwRQnPAHgW'
+            );
+
+            await auctionContract.removeAuction('1', mintContract.address, { from: nftOwner });
+            result = await auctionContract.getAuctions();
+            assert.equal(result.length, 0, 'there should be no auctions now!');
+        });
     });
 });
