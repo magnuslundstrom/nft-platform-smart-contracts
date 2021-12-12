@@ -22,10 +22,7 @@ contract Mint is ERC721URIStorage, Ownable {
         tokenId += 1;
     }
 
-    function mintNFT(address receiver, string calldata tokenURI)
-        public
-        onlyOwner
-    {
+    function mintNFT(address receiver, string calldata tokenURI) public {
         incrementTokenId();
         _mint(receiver, tokenId);
         _setTokenURI(tokenId, tokenURI);
