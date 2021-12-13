@@ -239,6 +239,7 @@ contract('NFTPlatformAuction', async (accounts) => {
                 assert.equal(err.reason, 'you must own the token');
             }
         });
+
         it('Should throw an error if it is not the owner of the token that calls the function', async () => {
             let result;
             await mintContract.mintNFT(nftOwner, 'tokenURI1');
@@ -272,6 +273,17 @@ contract('NFTPlatformAuction', async (accounts) => {
             await auctionContract.removeAuction('1', mintContract.address, { from: nftOwner });
             result = await auctionContract.getAuctions();
             assert.equal(result.length, 0, 'there should be no auctions now!');
+        });
+        it('Should emit a removeAuction event', async () => {
+            await mintContract.mintNFT(nftOwner, 'tokenURI1');
+            await mintContract.setApprovalForAll(auctionContract.address, true, { from: nftOwner });
+            await auctionContract.createAuction(_price, 1, mintContract.address, { from: nftOwner });
+
+            const receipt = await auctionContract.removeAuction('1', mintContract.address, {
+                from: nftOwner,
+            });
+            const event = receipt.logs[0].event;
+            assert.equal(event, 'RemoveAuction');
         });
     });
 });

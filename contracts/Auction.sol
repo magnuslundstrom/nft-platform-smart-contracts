@@ -30,6 +30,12 @@ contract NFTPlatformAuction {
         address NFTContractAddress
     );
 
+    event RemoveAuction(
+        uint256 indexed tokenId,
+        address indexed owner,
+        address NFTContractAddress
+    );
+
     event NFTBuy(
         uint256 indexed refTokenId,
         address indexed refBuyer,
@@ -123,6 +129,7 @@ contract NFTPlatformAuction {
 
         removeIndex(auctionListIndexMap[_tokenId] - 1);
         delete auctionListIndexMap[_tokenId];
+        emit RemoveAuction(_tokenId, msg.sender, _NFTContractAddress);
     }
 
     // add in pagination later
