@@ -54,6 +54,11 @@ const networks = (module.exports = {
             port: 8545,
             network_id: '*',
         },
+        ganache_cli_dev: {
+            host: '188.166.167.63',
+            port: 8545,
+            network_id: '*',
+        },
         // Another network with more advanced options...
         // advanced: {
         // port: 8777,             // Custom port
