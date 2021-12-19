@@ -22,7 +22,7 @@
 
 Make sure you have truffle installed on your local machine to run the code in this repo.
 
-If you don't have truffle installed you can run ```npm i -g truffle````
+If you don't have truffle installed you can run `npm i -g truffle`
 
 ## Actions
 
