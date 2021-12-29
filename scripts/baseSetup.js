@@ -29,17 +29,17 @@ const mintContract = new ethers.Contract(MINT_CONTRACT_ADDRESS, MINT_ABI, mintCo
 const mint = async () => {
     await mintContract.mintNFT(
         '0xb22d34ABC6716e210ff095CaFdCe6A83990f0A7A',
-        'http://nft.josefinegade.com/metadata-1.json'
+        'https://nft.josefinegade.com/metadata-1.json'
     );
 
     await mintContract.mintNFT(
         '0xb22d34ABC6716e210ff095CaFdCe6A83990f0A7A',
-        'http://nft.josefinegade.com/metadata-2.json'
+        'https://nft.josefinegade.com/metadata-2.json'
     );
 
     await mintContract.mintNFT(
         '0x73d99F9ED60622a4939E7c13Ffa52A69547A9A1B',
-        'http://nft.josefinegade.com/metadata-3.json'
+        'https://nft.josefinegade.com/metadata-3.json'
     );
 };
 
