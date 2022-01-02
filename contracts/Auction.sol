@@ -45,6 +45,24 @@ contract NFTPlatformAuction {
         uint256 timeStamp
     );
 
+    modifier mostOwnTokenMod(address _NFTContractAddress, uint256 _tokenId) {
+        require(
+            ERC721URIStorage(_NFTContractAddress).ownerOf(_tokenId) ==
+                msg.sender,
+            "you must own the token"
+        );
+        _;
+    }
+
+    modifier auctionExistsMod(
+        uint256 _tokenId,
+        bool _boolean,
+        string memory _msg
+    ) {
+        require(auctionExists(_tokenId) == _boolean, _msg);
+        _;
+    }
+
     function getAuctionListLength() public view returns (uint256) {
         return auctionList.length;
     }
@@ -61,20 +79,15 @@ contract NFTPlatformAuction {
         uint256 _price,
         uint256 _tokenId,
         address _NFTContractAddress
-    ) public {
-        require(
-            ERC721URIStorage(_NFTContractAddress).ownerOf(_tokenId) ==
-                msg.sender,
-            "you must own the token"
-        );
-
-        require(
-            auctionExists(_tokenId) == false,
+    )
+        public
+        mostOwnTokenMod(_NFTContractAddress, _tokenId)
+        auctionExistsMod(
+            _tokenId,
+            false,
             "an auction already exists for this token"
-        );
-
-        // add in requirement that token exists
-
+        )
+    {
         Auction storage auction = auctionsMap[_tokenId];
         auction.seller = msg.sender;
         auction.price = _price;
@@ -91,7 +104,7 @@ contract NFTPlatformAuction {
     function buyNFT(uint256 _tokenId) public payable {
         Auction memory auction = auctionsMap[_tokenId];
 
-        require(auction.price == msg.value, "you must pay the price ser");
+        require(auction.price == msg.value, "you must pay the price");
         ERC721URIStorage(auction.NFTContractAddress).safeTransferFrom(
             auction.seller,
             msg.sender,
@@ -115,18 +128,13 @@ contract NFTPlatformAuction {
 
     function removeAuction(uint256 _tokenId, address _NFTContractAddress)
         public
-    {
-        require(
-            ERC721URIStorage(_NFTContractAddress).ownerOf(_tokenId) ==
-                msg.sender,
-            "you must own the token"
-        );
-
-        require(
-            auctionExists(_tokenId) == true,
+        mostOwnTokenMod(_NFTContractAddress, _tokenId)
+        auctionExistsMod(
+            _tokenId,
+            true,
             "an auction must exist for this token before you can remove it"
-        );
-
+        )
+    {
         removeIndex(auctionListIndexMap[_tokenId] - 1);
         delete auctionListIndexMap[_tokenId];
         emit RemoveAuction(_tokenId, msg.sender, _NFTContractAddress);
