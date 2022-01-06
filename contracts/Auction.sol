@@ -140,7 +140,6 @@ contract NFTPlatformAuction {
         emit RemoveAuction(_tokenId, msg.sender, _NFTContractAddress);
     }
 
-    // add in pagination later
     function getAuctions() public view returns (NFTAuctionItem[] memory) {
         uint256 totalAuctions = getAuctionListLength();
         NFTAuctionItem[] memory auctions = new NFTAuctionItem[](totalAuctions);
