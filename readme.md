@@ -24,6 +24,11 @@ Make sure you have truffle installed on your local machine to run the code in th
 
 If you don't have truffle installed you can run `npm i -g truffle`
 
+Make sure you have ganache-cli installed on your local machine to run the code in this repo.
+
+If you don't have truffle installed you can run `npm i -g ganache-cli`
+
+
 ## Actions
 
 Remember to edit the truffle-config.js file to match your local Ganache environment. If you use the provided "fresh.sh" script found in the "scripts" directory, the plotted information should match.
